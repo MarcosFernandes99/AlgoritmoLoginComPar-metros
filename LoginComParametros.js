@@ -1,92 +1,78 @@
-var nomeArray = []
-var senhaArray = []
-var contador = 0
-var opcao = 0
-var loginValido = false
+let nomes = []
+let senhas = []
+let continuar = true
 
+do {
 
-while(opcao != 4){
-opcao = VerificarInformações()
-if(opcao == 1){
-PerguntarDados()
-console.log(nomeArray)
-console.log(senhaArray)
+let opcao = EscolherFuncao()
+
+switch (opcao) {
+    case "1":
+        CadastrarUsuario()
+    break;
+
+    case "2":
+        console.log(`Você escolheu login!`)
+        let nome = prompt(`Digite o nome para login`)
+        let senha = parseInt(prompt(`Digite a senha do login`))
+        if((FazerLogin(nome, senha))){
+            console.log(`Login feito com sucesso!`)
+        }
+        else{
+            console.log(`Nome ou senha incorretos!`)
+        }
+    break;
+
+    case "3":
+        console.log(`Você escolheu excluir`)
+        let nomeExcluir = prompt(`Digite o nome para excluir`)
+        ExluirCadastro(nomeExcluir)
+    break;
+    
+    case "4":
+        console.log(`Você escolheu encerrar`)
+        continuar = false
+    break;
+    default:
+        console.log(`Opção não existe, tente novamente!`)
+    break;
 }
-else if(opcao == 2){
-var nomeLogin = prompt(`Qual o seu nome`)
-var senhaLogin = parseInt(prompt(`Qual a senha`))
-if(FazerLogin(nomeLogin, senhaLogin)){
-    console.log(`Login feito com sucesso!`)
-}
-else{
-    console.log(`Dados incorretos, tente novamente!`)
-}
-}
 
-else if(opcao == 3){
-var nomeExcluir = prompt(`Qual nome deseja excluir`)
-ExcluirCadastro(nomeExcluir)
-}
+} while(continuar)
+
+
+function CadastrarUsuario(){
+    nomes.push(prompt(`Qual o seu nome`))
+    senhas.push(parseInt(prompt(`Qual a sua senha`)))
+    console.log(nomes, senhas)
 }
 
-
-
-
-function PerguntarDados() {
-    nomeArray[contador] = prompt(`Qual o seu nome`)
-    senhaArray[contador] = parseInt(prompt(`Qual a senha`))
-    contador++
-}
-
-// function CadastrarNovamente(){
-//     return prompt(`Deseja inserir novos dados? 1 - Sim/ 2 - Não`)
-// }
-
-function VerificarInformações() {
-    return prompt(`O que deseja fazer? 1 - Cadastrar/2 - Fazer Login/ 3 - Excluir Cadastro/ 4 - Encerrar`)
+function EscolherFuncao(){
+    return prompt(`1-Cadastrar/2-Fazer Login/3-Excluir Cadastro/4-Encerrar Programa`)
     
 }
 
-function FazerLogin(nomeParametro, senhaParametro) {     
-    for(var index = 0; index < contador; index++){
-        if(nomeParametro == nomeArray[index] && senhaParametro == senhaArray[index]){
-            return true
-        }       
-        else{
-            return false
-        }                
-   }         
+function FazerLogin(nomeParametro, senhaParametro){
+    let verificaoNomes = nomes.includes(nomeParametro)
+    let verificaoSenhas = senhas.includes(senhaParametro)
+    if(verificaoNomes && verificaoSenhas){
+        return true
+    }
+    else{
+        return false
+    }
+
 }
 
-function ExcluirCadastro(excluir){
-    for(var index = 0; index < contador; index++){
-        if(excluir == nomeArray[index]){
-            nomeArray[index] = 0
-            senhaArray[index] = 0 
+function ExluirCadastro(nomeParametro){
+    let nomesAux = nomes.filter(nome => nome != nomeParametro)
+    let senhasAux = senhas.filter((senha, index) => {
+        if(nomes[index] != nomeParametro){
+            return senha
         }
-    }
-    for(var atual = 0; atual < contador - 1; atual++){
-        for(var seguinte = atual + 1; seguinte < contador; seguinte++){
-            if(nomeArray[atual] == 0){
-                nomeArray[atual] = nomeArray[seguinte]
-                nomeArray[seguinte] = 0
-                senhaArray[atual] = senhaArray[seguinte]
-                senhaArray[seguinte] = 0
-            }
-        }         
-}
-var nomeAux = []
-var senhaAux = [] 
-    for(var i = 0; i < contador; i++){
-        if(nomeArray[i] != 0){
-            nomeAux[i] = nomeArray[i]
-            senhaAux[i] = senhaArray[i]
- }
-}
-        nomeArray = nomeAux
-        senhaArray = senhaAux
-        contador--
-        console.log(nomeArray)
-        console.log(senhaArray)
-        
+    })
+    nomes = nomesAux
+    senhas = senhasAux
+
+    console.log(nomes, senhas)
 }
